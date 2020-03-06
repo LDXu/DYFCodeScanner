@@ -2,7 +2,7 @@
 Pod::Spec.new do |s|
 
   s.name         = "DDYFCodeScanner"
-  s.version      = "0.0.1"
+  s.version      = "0.0.2"
   s.summary      = "A simple QR code and barcode scanner."
   s.description  = <<-DESC
     flutter插件必须要发布的pod，无法依赖git。基于作者源码发布新版。原版https://github.com/dgynfi/DYFCodeScanner.
