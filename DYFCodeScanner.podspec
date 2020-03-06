@@ -1,18 +1,18 @@
 
 Pod::Spec.new do |s|
 
-  s.name         = "DYFCodeScanner"
-  s.version      = "1.0.2"
+  s.name         = "DDYFCodeScanner"
+  s.version      = "0.0.1"
   s.summary      = "A simple QR code and barcode scanner."
   s.description  = <<-DESC
-	A simple QR code and barcode scanner, which has a set of custom scanning animation and interface, supports camera zooming, and can generate and identify QR code.
+    flutter插件必须要发布的pod，无法依赖git。基于作者源码发布新版。原版https://github.com/dgynfi/DYFCodeScanner.
                    DESC
 
-  s.homepage     = "https://github.com/dgynfi/DYFCodeScanner"
+  s.homepage     = "https://github.com/LDXu/DYFCodeScanner"
 
   s.license      = { :type => "MIT", :file => "LICENSE" }
 
-  s.author       = { "dyf" => "vinphy.teng@foxmail.com" }
+  s.author       = { "xb" => "123495351@qq.com" }
 
   s.platform     = :ios
   s.ios.deployment_target 	= "8.0"
@@ -20,7 +20,7 @@ Pod::Spec.new do |s|
   # s.watchos.deployment_target = "2.0"
   # s.tvos.deployment_target 	= "9.0"
 
-  s.source       = { :git => "https://github.com/dgynfi/DYFCodeScanner.git", :tag => s.version.to_s }
+  s.source       = { :git => "https://github.com/LDXu/DYFCodeScanner.git", :tag => s.version.to_s }
 
   s.source_files  = "Classes/**/*.{h,m}"
   s.public_header_files = "Classes/**/*.h"
