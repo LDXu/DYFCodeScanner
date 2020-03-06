@@ -26,9 +26,8 @@
 #import "DYFCodeScannerPreView.h"
 #import "DYFCodeScannerMacros.h"
 #import "UIButton+Corner.h"
-
-#define ItemW                  40.f
-#define ItemH                  40.f
+#define ItemW                  60.f
+#define ItemH                  60.f
 
 @interface DYFCodeScannerPreView ()
 @property (nonatomic, strong) UIImageView *lineImgView;
@@ -113,6 +112,13 @@
     torchButton.showsTouchWhenHighlighted = YES;
     [self addSubview:torchButton];
     
+    UILabel *torchLabel = [[UILabel alloc] init];
+    torchLabel.text = @"打开手电筒";
+    torchLabel.font = [UIFont systemFontOfSize:13];
+    torchLabel.tag = 201;
+    torchLabel.textColor = [UIColor colorWithRed:153.0f/255.0f green:153.0f/255.0f blue:153.0f/255.0f alpha:1];
+    [self addSubview:torchLabel];
+    
     UIButton *photoButton = [[UIButton alloc] init];
     [photoButton setImage:DYFBundleImageNamed(@"code_scanner_photo") forState:UIControlStateNormal];
     [photoButton addTarget:self action:@selector(itemClicked:) forControlEvents:UIControlEventTouchUpInside];
@@ -120,13 +126,20 @@
     photoButton.showsTouchWhenHighlighted = YES;
     [self addSubview:photoButton];
     
-    UIButton *historyButton = [[UIButton alloc] init];
-    [historyButton setImage:DYFBundleImageNamed(@"code_scanner_history") forState:UIControlStateNormal];
-    [historyButton addTarget:self action:@selector(itemClicked:) forControlEvents:UIControlEventTouchUpInside];
-    historyButton.tag       = 13;
-    historyButton.hidden    = YES;
-    historyButton.showsTouchWhenHighlighted = YES;
-    [self addSubview:historyButton];
+    UILabel *photoLabel = [[UILabel alloc] init];
+    photoLabel.text = @"相册";
+    photoLabel.font = [UIFont systemFontOfSize:13];
+    photoLabel.tag = 202;
+    photoLabel.textColor = [UIColor colorWithRed:153.0f/255.0f green:153.0f/255.0f blue:153.0f/255.0f alpha:1];
+    [self addSubview:photoLabel];
+    
+//    UIButton *historyButton = [[UIButton alloc] init];
+//    [historyButton setImage:DYFBundleImageNamed(@"code_scanner_history") forState:UIControlStateNormal];
+//    [historyButton addTarget:self action:@selector(itemClicked:) forControlEvents:UIControlEventTouchUpInside];
+//    historyButton.tag       = 13;
+//    historyButton.hidden    = YES;
+//    historyButton.showsTouchWhenHighlighted = YES;
+//    [self addSubview:historyButton];
 }
 
 - (void)addPinchGR {
@@ -185,7 +198,8 @@
     UIButton *torchButton   = [self viewWithTag:11];
     UIButton *photoButton   = [self viewWithTag:12];
     UIButton *historyButton = [self viewWithTag:13];
-    
+    UILabel  *torchLabel    = [self viewWithTag:201];
+    UILabel  *photoLabel    = [self viewWithTag:202];
     if (self.hasNavigationBar) {
         backButton.hidden = YES;
         titleLabel.hidden = YES;
@@ -209,25 +223,28 @@
     CGFloat tipLabY   = self.tipLabel.frame.origin.y;
     CGFloat tipLabH   = self.tipLabel.frame.size.height;
     
-    CGFloat torchBtnX = (vSize.width - self.transparentArea.width)/2.f;
-    CGFloat torchBtnY = tipLabY + tipLabH + 30.f;
+    CGFloat torchBtnX = (vSize.width)/2.f - ItemW*2;
+    CGFloat torchBtnY = tipLabY + (vSize.height - tipLabY - tipLabH)/2 - ItemH/2;
     torchButton.frame = CGRectMake(torchBtnX, torchBtnY, ItemW, ItemH);
     torchButton.clipCorner(UIRectCornerAllCorners, bgColor, ItemH/2, VVBorderNull);
+    torchLabel.frame = CGRectMake(torchBtnX, torchBtnY + ItemH, 70, 20);
+    torchLabel.center = CGPointMake(torchButton.center.x, torchButton.center.y + ItemH - 8);
     
-    CGFloat photoBtnX = (vSize.width - ItemW)/2.f;
+    CGFloat photoBtnX = (vSize.width)/2.f + ItemW;
     CGFloat photoBtnY = torchButton.frame.origin.y;
-    if (historyButton.hidden) {
-        photoBtnX     = (vSize.width + self.transparentArea.width)/2.f - ItemW;
-    }
+//    if (historyButton.hidden) {
+//        photoBtnX  = (vSize.width + self.transparentArea.width)/2.f - ItemW;
+//    }
     photoButton.frame = CGRectMake(photoBtnX, photoBtnY, ItemW, ItemH);
     photoButton.clipCorner(UIRectCornerAllCorners, bgColor, ItemH/2, VVBorderNull);
-    
-    if (!historyButton.hidden) {
-        CGFloat historyBtnX = (vSize.width + self.transparentArea.width)/2.f - ItemW;
-        CGFloat historyBtnY = torchButton.frame.origin.y;
-        historyButton.frame = CGRectMake(historyBtnX, historyBtnY, ItemW, ItemH);
-        historyButton.clipCorner(UIRectCornerAllCorners, bgColor, ItemH/2, VVBorderNull);
-    }
+    photoLabel.frame = CGRectMake(photoBtnX, photoBtnY + ItemH, 30, 20);
+    photoLabel.center = CGPointMake(photoButton.center.x, photoButton.center.y + ItemH - 8);
+//    if (!historyButton.hidden) {
+//        CGFloat historyBtnX = (vSize.width + self.transparentArea.width)/2.f - ItemW;
+//        CGFloat historyBtnY = torchButton.frame.origin.y;
+//        historyButton.frame = CGRectMake(historyBtnX, historyBtnY, ItemW, ItemH);
+//        historyButton.clipCorner(UIRectCornerAllCorners, bgColor, ItemH/2, VVBorderNull);
+//    }
 }
 
 - (void)layoutLine {
@@ -270,10 +287,12 @@
             DYFLog(@"hasTorch: %d", self.hasTorch);
             if (self.hasTorch) {
                 sender.selected = !sender.selected;
-                
+                UILabel  *torchLabel    = [self viewWithTag:201];
                 if (sender.selected) {
                     !DYFRespondsToMethod(self.delegate, turnOnTorch)  ?: [self.delegate turnOnTorch];
+                    torchLabel.text = @"关闭手电筒";
                 } else {
+                    torchLabel.text = @"打开手电筒";
                     !DYFRespondsToMethod(self.delegate, turnOffTorch) ?: [self.delegate turnOffTorch];
                 }
             }
